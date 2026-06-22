@@ -2,6 +2,9 @@
 FROM public.ecr.aws/amazoncorretto/amazoncorretto:21 AS build
 WORKDIR /app
 
+# Maven wrapper 第一次运行时会下载 Maven 压缩包，并用 tar/gzip 解压。
+RUN yum install -y tar gzip && yum clean all
+
 COPY .mvn .mvn
 COPY mvnw pom.xml ./
 RUN ./mvnw dependency:go-offline
