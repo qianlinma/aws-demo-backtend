@@ -16,6 +16,7 @@ class ProductControllerMockitoTest {
 
     @Test
     void getAllProductsReturnsProductsKeyWithMockService() {
+        // Small CI trigger comment after refreshing the GitHub connection.
         // mock(...) 让 Mockito 自动生成一个假的 ProductService。如果用 subclass mock maker，它通常会生成一个临时子类
         // 这和我们手写 FakeProductService 的目的相同：不调用真的 service/repository/DynamoDB。
 
