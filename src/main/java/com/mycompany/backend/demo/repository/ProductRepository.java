@@ -2,6 +2,7 @@ package com.mycompany.backend.demo.repository;
 
 import com.mycompany.backend.demo.model.Product;
 import org.springframework.stereotype.Repository;
+import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.ScanRequest;
@@ -16,7 +17,10 @@ public class ProductRepository {
     private final String productsTableName;
 
     public ProductRepository() {
-        this.dynamoDbClient = DynamoDbClient.create();
+        this.dynamoDbClient = DynamoDbClient.builder()
+                .region(Region.of(System.getenv().getOrDefault("AWS_REGION",
+                        System.getenv().getOrDefault("AWS_DEFAULT_REGION", "us-west-2"))))
+                .build();
         this.productsTableName = System.getenv().getOrDefault("PRODUCTS_TABLE_NAME", "demo-products-tf");
     }
 
