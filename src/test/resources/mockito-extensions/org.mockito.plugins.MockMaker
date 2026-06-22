@@ -1,0 +1,24 @@
+# Mockito 默认可能使用 inline mock maker。
+
+# inline 的意思是：Mockito 尽量在原来的 class 上“现场改造”行为，而不是只靠继承生成一个子类。
+# 这种方式能力更强，例如可以 mock final class、final method、static method 等更难替换的代码。
+# inline mock maker 在某些本机 JDK 21 环境里需要动态 attach Java agent。
+# Java agent 可以理解成 JVM 启动后或启动时加载的一个小工具。它可以观察或修改 JVM 里正在加载/已经加载的 class bytecode。
+# JDK 是开发工具包，JRE 是运行环境，而 Java agent 是挂在 JVM 上辅助运行/改造程序的工具。
+
+# Mockito 自己 attach agent，就是运行测试时临时把这个工具挂到当前 JVM 上。
+# 这样 Mockito 才能改造 class，让原本不容易替换的方法也能变成可 mock 的行为。
+# 我们之前跑测试失败，就是因为当前 JVM 不允许 Mockito 自己 attach agent。
+
+# mock-maker-subclass 告诉 Mockito：用 subclass 的方式生成 mock object。
+# subclass 就是“子类”。
+# 例如 ProductService 是父类，Mockito 可以生成一个临时子类，类似 TestProductService extends ProductService。
+# 这个临时子类会覆盖 getAllProducts() 之类的方法，然后按 when(...).thenReturn(...) 返回测试数据。
+# 这就是“用 subclass 的方式生成 mock object”。
+
+# 这样 ProductService 这种普通 class 依然可以被 mock，而且本机测试更稳定。
+# “普通 class” 的意思是：ProductService 不是 final class，getAllProducts() 也不是 final method/static method。
+# 这种 class 很适合用 subclass mock，因为 Mockito 可以通过继承和 override 来控制它的行为。
+
+
+mock-maker-subclass
