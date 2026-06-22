@@ -1,4 +1,5 @@
 # 使用 AWS ECR Public 的 Amazon Corretto 21，避免 CodeBuild 从 Docker Hub 拉 Java 镜像时遇到匿名限流。
+# CI trigger check for backend pipeline.
 FROM public.ecr.aws/amazoncorretto/amazoncorretto:21 AS build
 WORKDIR /app
 
