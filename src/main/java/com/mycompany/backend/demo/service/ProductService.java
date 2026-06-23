@@ -1,20 +1,12 @@
 package com.mycompany.backend.demo.service;
 
 import com.mycompany.backend.demo.model.Product;
-import com.mycompany.backend.demo.repository.ProductRepository;
-import org.springframework.stereotype.Service;
+import com.mycompany.backend.demo.model.ProductInventory;
 
 import java.util.List;
 
-@Service
-public class ProductService {
-    private final ProductRepository productRepository;
+public interface ProductService {
+    List<Product> getAllProducts();
 
-    public ProductService(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
-
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
-    }
+    ProductInventory getProductInventory(int productId);
 }

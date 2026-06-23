@@ -1,0 +1,44 @@
+openapi: 3.0.3
+info:
+  title: Inventory Service API
+  version: 1.0.0
+paths:
+  /api/inventory/{productId}:
+    get:
+      tags:
+        - Inventory
+      operationId: getInventory
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: Inventory information for one product.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InventoryItem"
+components:
+  schemas:
+    InventoryItem:
+      type: object
+      required:
+        - productId
+        - quantityAvailable
+        - warehouseRegion
+        - available
+      properties:
+        productId:
+          type: integer
+          format: int32
+        quantityAvailable:
+          type: integer
+          format: int32
+        warehouseRegion:
+          type: string
+        available:
+          type: boolean

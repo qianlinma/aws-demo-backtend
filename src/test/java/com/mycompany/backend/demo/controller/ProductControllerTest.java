@@ -1,6 +1,7 @@
 package com.mycompany.backend.demo.controller;
 
 import com.mycompany.backend.demo.model.Product;
+import com.mycompany.backend.demo.model.ProductInventory;
 import com.mycompany.backend.demo.service.ProductService;
 import org.junit.jupiter.api.Test;
 
@@ -52,15 +53,12 @@ class ProductControllerTest {
     // 如果我们测试 ProductService，才会 fake 它的下一层依赖 ProductRepository。
     // private 表示这个 fake class 只在当前 test class 内部使用，外面代码不能用它。
     // static 表示它不需要依赖 ProductControllerTest 的实例，可以像普通 helper class 一样被创建。
-    // extends ProductService 是因为 ProductController 构造函数要求传入 ProductService 类型。
-    // FakeProductService 继承 ProductService 后，就可以被当成 ProductService 传给 ProductController。
-    private static class FakeProductService extends ProductService {
+    // implements ProductService 是因为 ProductController 构造函数要求传入 ProductService 类型。
+    // FakeProductService 实现 ProductService 后，就可以被当成 ProductService 传给 ProductController。
+    private static class FakeProductService implements ProductService {
         private final List<Product> products;
 
         FakeProductService(List<Product> products) {
-            // 父类 ProductService 构造函数需要 ProductRepository。
-            // 这个 fake class 会 override getAllProducts()，不会用到 repository，所以这里传 null。
-            super(null);
             // 保存 test 想让 fake service 返回的产品列表。
             this.products = products;
         }
@@ -69,6 +67,11 @@ class ProductControllerTest {
         public List<Product> getAllProducts() {
             // 当 controller 调用 productService.getAllProducts() 时，直接返回 test 提前准备好的 products。
             return products;
+        }
+
+        @Override
+        public ProductInventory getProductInventory(int productId) {
+            return new ProductInventory(productId, 0, "unknown", false);
         }
     }
 }
