@@ -17,7 +17,10 @@ RUN ./mvnw clean package -DskipTests
 FROM public.ecr.aws/amazoncorretto/amazoncorretto:21
 WORKDIR /app
 
+RUN yum install -y curl && yum clean all \
+    && curl -fsSL -o /app/aws-opentelemetry-agent.jar https://github.com/aws-observability/aws-otel-java-instrumentation/releases/latest/download/aws-opentelemetry-agent.jar
+
 COPY --from=build /app/target/*.jar app.jar
 
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-javaagent:/app/aws-opentelemetry-agent.jar", "-jar", "app.jar"]
