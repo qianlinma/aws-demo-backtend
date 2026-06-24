@@ -20,10 +20,10 @@ public class InventoryClientConfig {
     @Bean
     public ApiClient inventoryApiClient(
             // 从配置中读取 inventory.service.base-url。
-            // 如果配置里没有这个值，就使用默认值 http://inventory.demo.local。
+            // 如果配置里没有这个值，就使用默认值 http://inventory.demo.internal。
             // 本地运行时可以改成 http://localhost:8080。
             // AWS ECS 运行时会通过环境变量 INVENTORY_SERVICE_BASE_URL 传入。
-            @Value("${inventory.service.base-url:http://inventory.demo.local}") String inventoryServiceBaseUrl
+            @Value("${inventory.service.base-url:http://inventory.demo.internal}") String inventoryServiceBaseUrl
     ) {
         // 创建 OpenAPI generated ApiClient。
         // 这个 object 负责保存 base URL、headers、JSON 解析等 HTTP client 配置。
