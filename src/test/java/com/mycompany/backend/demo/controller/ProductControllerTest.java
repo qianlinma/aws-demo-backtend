@@ -1,7 +1,9 @@
 package com.mycompany.backend.demo.controller;
 
 import com.mycompany.backend.demo.model.Product;
+import com.mycompany.backend.demo.model.ProductDetails;
 import com.mycompany.backend.demo.model.ProductInventory;
+import com.mycompany.backend.demo.model.ProductUserProfile;
 import com.mycompany.backend.demo.service.ProductService;
 import org.junit.jupiter.api.Test;
 
@@ -72,6 +74,25 @@ class ProductControllerTest {
         @Override
         public ProductInventory getProductInventory(int productId) {
             return new ProductInventory(productId, 0, "unknown", false);
+        }
+
+        @Override
+        public ProductUserProfile getUserProfile(int userId) {
+            return new ProductUserProfile(userId, "Test User", "BASIC", "unknown");
+        }
+
+        @Override
+        public ProductDetails getProductDetails(int productId) {
+            Product product = products.stream()
+                    .filter(item -> item.id() != null && item.id() == productId)
+                    .findFirst()
+                    .orElseGet(() -> new Product(productId, "", "Unknown product"));
+
+            return new ProductDetails(
+                    product,
+                    new ProductInventory(productId, 0, "unknown", false),
+                    new ProductUserProfile(productId, "Test User", "BASIC", "unknown")
+            );
         }
     }
 }
