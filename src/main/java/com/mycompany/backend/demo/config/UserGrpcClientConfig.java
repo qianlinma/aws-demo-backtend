@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.concurrent.TimeUnit;
+
 @Configuration
 public class UserGrpcClientConfig {
     @Bean(destroyMethod = "shutdown")
@@ -20,6 +22,7 @@ public class UserGrpcClientConfig {
 
     @Bean
     public UserServiceGrpc.UserServiceBlockingStub userServiceBlockingStub(ManagedChannel userGrpcChannel) {
-        return UserServiceGrpc.newBlockingStub(userGrpcChannel);
+        return UserServiceGrpc.newBlockingStub(userGrpcChannel)
+                .withDeadlineAfter(2, TimeUnit.SECONDS);
     }
 }
